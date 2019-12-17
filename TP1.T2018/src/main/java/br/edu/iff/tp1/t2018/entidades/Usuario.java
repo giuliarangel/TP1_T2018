@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -35,6 +36,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
     @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha")})
 public class Usuario implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuarioTel")
+    private Collection<Telefone> telefoneCollection;
     @OneToMany(mappedBy = "usuaIdUsuario")
     private Collection<Endereco> enderecoCollection = new ArrayList<Endereco>();
     @Size(max = 20)
@@ -135,6 +139,15 @@ public class Usuario implements Serializable {
 
     public void setEnderecoCollection(Collection<Endereco> enderecoCollection) {
         this.enderecoCollection = enderecoCollection;
+    }
+
+    @XmlTransient
+    public Collection<Telefone> getTelefoneCollection() {
+        return telefoneCollection;
+    }
+
+    public void setTelefoneCollection(Collection<Telefone> telefoneCollection) {
+        this.telefoneCollection = telefoneCollection;
     }
     
 }

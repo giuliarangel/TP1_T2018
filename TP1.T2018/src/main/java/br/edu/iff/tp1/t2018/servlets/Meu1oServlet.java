@@ -8,6 +8,7 @@ package br.edu.iff.tp1.t2018.servlets;
 import br.edu.iff.tp1.t2018.entidades.Endereco;
 import br.edu.iff.tp1.t2018.entidades.Usuario;
 import br.edu.iff.tp1.t2018.utilidades.HibernateUtil;
+import br.edu.iff.tp1.t2018.entidades.Telefone;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Random;
@@ -44,22 +45,22 @@ public class Meu1oServlet extends HttpServlet {
         String rg = request.getParameter("rg");
         String cpf = request.getParameter("cpf");
         String cpf2 = request.getParameter("cpf2");
-        
+
         Usuario user = new Usuario();
         user.setNome(nomeCompleto);
         user.setSenha(senha);
 
         user.setDocRg(rg);
         if (cpf != null && cpf2 != null) {
-            user.setDocCpf(Long.parseLong(cpf+cpf2));
+            user.setDocCpf(Long.parseLong(cpf + cpf2));
         }
 
         Random rng = new Random();
         user.setIdUsuario(rng.nextInt(Integer.MAX_VALUE));
-        
+
         Endereco endResidencial = new Endereco();
         endResidencial.setIdEndereco(rng.nextInt(Integer.MAX_VALUE));
-        
+
         String rua = request.getParameter("rua");
         String numero = request.getParameter("numero");
         String bairro = request.getParameter("bairro");
@@ -67,30 +68,56 @@ public class Meu1oServlet extends HttpServlet {
         String cidade = request.getParameter("cidade");
         String cep1 = request.getParameter("cep");
         String cep2 = request.getParameter("cep2");
-        
+
         endResidencial.setRua(rua);
         endResidencial.setNumero(numero);
         endResidencial.setBairro(bairro);
         endResidencial.setEstado(estado);
         endResidencial.setMunicipio(cidade);
         if (cep1 != null && cep2 != null) {
-            endResidencial.setCep(Integer.parseInt(cep1+cep2));
+            endResidencial.setCep(Integer.parseInt(cep1 + cep2));
         }
-        
+
         endResidencial.setUsuaIdUsuario(user);
         user.getEnderecoCollection().add(endResidencial);
 
+        Telefone Residencial = new Telefone();
+        Residencial.setIdTelefone(rng.nextInt(Integer.MAX_VALUE));
+
+        String id_tel = request.getParameter("id_tel");
+        String ddd = request.getParameter("ddd");
+        String numeroTell = request.getParameter("numeroTell");
+        String operadora = request.getParameter("operadora");
+        String id_usuario_tel = request.getParameter("id_usuario_tel");
+        
+       Residencial.setIdTel(id_tel);
+       // Residencial.setDdd(ddd);
+        Residencial.setNumero(Integer.SIZE);numeroTell(numeroTell);
+        Residencial.setOperadora(operadora);
+        Residencial.setIdUsuarioTel(idUsuarioTel);
+        if ( ddd != null) {
+            Residencial(Integer.parseInt(ddd));
+        if ( numeroTell != null) {
+            Residencial(Integer.parseInt(numeroTell));
+        }
+        
+        Residencial.setIdUsuarioTel(user);
+        user.getTelefoneCollection().add(Residencial);
+
+        
+        
         Session sessaoBD = HibernateUtil.getSession();
         Transaction tr = sessaoBD.beginTransaction();
         sessaoBD.save(user);
-        sessaoBD.save(endResidencial);
+        sessaoBD.save(endResidencial); //
+        
         tr.commit();
         sessaoBD.close();
 
         response.sendRedirect("testezinho.jsp");
     }
 
-    /**
+        /**
      * Handles the HTTP <code>GET</code> method.
      *
      * @param request servlet request
